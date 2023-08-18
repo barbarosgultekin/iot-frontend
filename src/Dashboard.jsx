@@ -36,12 +36,10 @@ function Dashboard() {
     };
 
     useEffect(() => {
-        getSale();
-
         const interval = setInterval(() => {
             getSale();
+            setData("");
         }, 5000);
-        setData()
         return () => clearInterval(interval);
     }, []);
 
@@ -79,7 +77,6 @@ function Dashboard() {
 
     return (
         <div>
-
             <Container fluid>
                 <Row>
                     <Col lg="5" sm="6">
@@ -139,7 +136,6 @@ function Dashboard() {
                                         <th className="border-1">Konum</th>
                                         <th className="border-0">Uyarı Mesajı</th>
                                         <th className="border-0">Mesaj Zamanı</th>
-                                        {/* <th className="border-0">Mesaj Id</th> */}
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -149,12 +145,10 @@ function Dashboard() {
                                                 <td onClick={() => post(item)}>{item.topic}</td>
                                                 <td>{item.value}</td>
                                                 <td>{item.receivedTime}</td>
-                                                {/* <td>{item.id}</td> */}
                                             </tr>
                                         )}
                                 </tbody>
                             </Table>
-
                         </Card.Body>
                     </Col>
                 </Row>
