@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/iot-frontend/static/css/main.9f456466.css",
-    "main.js": "/iot-frontend/static/js/main.37756a3a.js",
+    "main.js": "/iot-frontend/static/js/main.c70c211b.js",
     "static/media/fa-solid-900.ttf": "/iot-frontend/static/media/fa-solid-900.4a2cd718d7031b732e76.ttf",
     "static/media/fa-brands-400.ttf": "/iot-frontend/static/media/fa-brands-400.150de8eaa454d669c405.ttf",
     "static/media/fa-solid-900.woff2": "/iot-frontend/static/media/fa-solid-900.bb975c966c37455a1bc3.woff2",
@@ -12,10 +12,10 @@
     "static/media/fa-v4compatibility.woff2": "/iot-frontend/static/media/fa-v4compatibility.68577e40f3e70067b5da.woff2",
     "index.html": "/iot-frontend/index.html",
     "main.9f456466.css.map": "/iot-frontend/static/css/main.9f456466.css.map",
-    "main.37756a3a.js.map": "/iot-frontend/static/js/main.37756a3a.js.map"
+    "main.c70c211b.js.map": "/iot-frontend/static/js/main.c70c211b.js.map"
   },
   "entrypoints": [
     "static/css/main.9f456466.css",
-    "static/js/main.37756a3a.js"
+    "static/js/main.c70c211b.js"
   ]
 }
