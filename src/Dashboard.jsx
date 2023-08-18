@@ -41,7 +41,7 @@ function Dashboard() {
         const interval = setInterval(() => {
             getSale();
         }, 5000);
-
+        setData()
         return () => clearInterval(interval);
     }, []);
 
