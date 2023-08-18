@@ -8,24 +8,16 @@ import {
     Table
 } from "react-bootstrap";
 
+import { Client } from 'paho-mqtt';
+
 function Dashboard() {
 
     const messageURL = "https://iotstartup.azurewebsites.net/api/Message";
 
-   // const messageURL = "https://localhost:5002/api/Message";
     const postURL = "https://iotstartup.azurewebsites.net/api/Message/PostToMqTT";
 
     const [sale, setSale] = useState([])
 
-    // const [formData, setformData] = useState({
-    //     topic,
-    //     value,
-    //     receivedTime
-    // })
-
-    // const handleChange = (e) => {
-    //     setformData(topic = e.topic, value = e.value, receivedTime = e.receivedTime)
-    // };
 
     const getSale = async () => {
         const response = await axios({
@@ -53,23 +45,75 @@ function Dashboard() {
         return () => clearInterval(interval);
     }, []);
 
+    const client = new Client("52deddadf1f6492b9f850cca56d211f5.s2.eu.hivemq.cloud", Number(8884), "clientId");
+
+    const onConnect = () => {
+        console.log("onConnect");
+        client.subscribe("uubasimevi/#");
+    };
+
+    const onConnectionLost = (responseObject) => {
+        if (responseObject.errorCode !== 0) {
+            console.log("onConnectionLost:" + responseObject.errorMessage);
+        }
+    };
+
+    const onMessageArrived = (message) => {
+        console.log("topic: " + message.destinationName)
+        setData(message.payloadString)
+        console.log("message: " + message.payloadString)
+
+        const data = { topic: message.destinationName, message: message.payloadString, date: "agust" }
+        const dataToJson = JSON.stringify(data);
+        localStorage.setItem('data', dataToJson)
+    };
+
+
+    const [data, setData] = useState();
+
+    client.connect({ onSuccess: onConnect, userName: "admin", password: "B4rb4r0s", useSSL: true });
+    client.onConnectionLost = onConnectionLost;
+    client.onMessageArrived = onMessageArrived;
+
+    let date = new Date().toLocaleString('tr-TR');
+
     return (
         <div>
 
             <Container fluid>
                 <Row>
-                    <Col lg="3" sm="6">
+                    <Col lg="5" sm="6">
                         <Card className="card-stats">
                             <Card.Body>
                                 <Row>
-                                    <Col xs="5">
+                                    <Col xs="1">
                                         <div className="icon-big text-center icon-warning">
-                                            <i className="fas fa-tractor"></i>
+                                            <i className="fas fa-bullhorn"></i>
                                         </div>
                                     </Col>
                                     <Col xs="7">
                                         <div className="numbers">
-                                            <p className="card-category">Hata Kodları</p>
+                                            <p className="card-category">Anlık Bildirim</p>
+                                            <Card.Title as="h2">{data}</Card.Title>
+                                        </div>
+                                    </Col>
+                                </Row>
+                                <hr></hr>
+                            </Card.Body>
+                        </Card>
+                    </Col>
+                    <Col lg="5" sm="6">
+                        <Card className="card-stats">
+                            <Card.Body>
+                                <Row>
+                                    <Col xs="1">
+                                        <div className="icon-big text-center icon-warning">
+                                            <i className="far fa-comment-alt"></i>
+                                        </div>
+                                    </Col>
+                                    <Col xs="7">
+                                        <div className="numbers">
+                                            <p className="card-category">Bildirimler</p>
                                             <Card.Title as="h2">{sale.length}</Card.Title>
                                         </div>
                                     </Col>
@@ -78,62 +122,11 @@ function Dashboard() {
                             </Card.Body>
                         </Card>
                     </Col>
-                    <Col lg="3" sm="6">
+                    <Col lg="2" >
                         <Card className="card-stats">
                             <Card.Body>
-                                <Row>
-                                    <Col xs="5">
-                                        <div className="icon-big text-center icon-warning">
-                                            <i className="fas fa-tractor"></i>
-                                        </div>
-                                    </Col>
-                                    <Col xs="7">
-                                        <div className="numbers">
-                                            <p className="card-category">Hata Kodları</p>
-                                            <Card.Title as="h2">{sale.length}</Card.Title>
-                                        </div>
-                                    </Col>
-                                </Row>
                                 <hr></hr>
-                            </Card.Body>
-                        </Card>
-                    </Col>
-                    <Col lg="3" sm="6">
-                        <Card className="card-stats">
-                            <Card.Body>
-                                <Row>
-                                    <Col xs="5">
-                                        <div className="icon-big text-center icon-warning">
-                                            <i className="fas fa-tractor"></i>
-                                        </div>
-                                    </Col>
-                                    <Col xs="7">
-                                        <div className="numbers">
-                                            <p className="card-category">Hata Kodları</p>
-                                            <Card.Title as="h2">{sale.length}</Card.Title>
-                                        </div>
-                                    </Col>
-                                </Row>
-                                <hr></hr>
-                            </Card.Body>
-                        </Card>
-                    </Col>
-                    <Col lg="3" sm="6">
-                        <Card className="card-stats">
-                            <Card.Body>
-                                <Row>
-                                    <Col xs="5">
-                                        <div className="icon-big text-center icon-warning">
-                                            <i className="fas fa-tractor"></i>
-                                        </div>
-                                    </Col>
-                                    <Col xs="7">
-                                        <div className="numbers">
-                                            <p className="card-category">Hata Kodları</p>
-                                            <Card.Title as="h2">{sale.length}</Card.Title>
-                                        </div>
-                                    </Col>
-                                </Row>
+                                <Card.Title as="h3">{date}</Card.Title>
                                 <hr></hr>
                             </Card.Body>
                         </Card>
@@ -146,7 +139,7 @@ function Dashboard() {
                                         <th className="border-1">Konum</th>
                                         <th className="border-0">Uyarı Mesajı</th>
                                         <th className="border-0">Mesaj Zamanı</th>
-                                        <th className="border-0">Mesaj Id</th>
+                                        {/* <th className="border-0">Mesaj Id</th> */}
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -156,7 +149,7 @@ function Dashboard() {
                                                 <td onClick={() => post(item)}>{item.topic}</td>
                                                 <td>{item.value}</td>
                                                 <td>{item.receivedTime}</td>
-                                                <td>{item.id}</td>
+                                                {/* <td>{item.id}</td> */}
                                             </tr>
                                         )}
                                 </tbody>
