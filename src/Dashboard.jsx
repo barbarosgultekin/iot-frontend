@@ -61,9 +61,9 @@ function Dashboard() {
         setData(message.payloadString)
         console.log("message: " + message.payloadString)
 
-        const data = { topic: message.destinationName, message: message.payloadString, date: "agust" }
-        const dataToJson = JSON.stringify(data);
-        localStorage.setItem('data', dataToJson)
+        // const data = { topic: message.destinationName, message: message.payloadString, date: "agust" }
+        // const dataToJson = JSON.stringify(data);
+        // localStorage.setItem('data', dataToJson)
     };
 
 
